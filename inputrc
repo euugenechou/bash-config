@@ -1,0 +1,26 @@
+# Fallback readline config (used when ble.sh is unavailable)
+
+set editing-mode vi
+
+# Cursor shape: beam in insert, block in command
+set show-mode-in-prompt on
+set vi-ins-mode-string \1\e[6 q\2
+set vi-cmd-mode-string \1\e[2 q\2
+
+# Completion
+set colored-stats on
+set colored-completion-prefix on
+set completion-ignore-case on
+set show-all-if-ambiguous on
+set mark-symlinked-directories on
+
+# Vi insert mode bindings
+set keymap vi-insert
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+Control-l: clear-screen
+
+# Vi command mode bindings
+set keymap vi-command
+"k": history-search-backward
+"j": history-search-forward
