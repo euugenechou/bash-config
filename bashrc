@@ -13,32 +13,12 @@ if [[ -f "$_blesh" ]]; then
 fi
 unset _blesh
 
-# -- shell options ------------------------------------------------------------
-
-shopt -s histappend
-shopt -s checkwinsize
-shopt -s globstar 2>/dev/null
-
-HISTCONTROL=ignoreboth:erasedups
-HISTSIZE=10000
-HISTFILESIZE=20000
-
 # -- source conf.d ------------------------------------------------------------
 
 for _conf in "$DOTFILES_DIR"/conf.d/*.bash; do
     [[ -f "$_conf" ]] && source "$_conf"
 done
 unset _conf
-
-# -- direnv -------------------------------------------------------------------
-
-if command -v direnv &>/dev/null; then
-    eval "$(direnv hook bash)"
-fi
-
-# -- cargo --------------------------------------------------------------------
-
-[[ -f "$HOME/.cargo/env" ]] && source "$HOME/.cargo/env"
 
 # -- ble.sh attach (must be last) --------------------------------------------
 
