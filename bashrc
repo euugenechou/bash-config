@@ -102,7 +102,9 @@ if [[ ${BLE_VERSION-} ]]; then
 
     # Vi-mode as default keymap
     bleopt default_keymap=vi
-    bleopt keymap_vi_mode_show=
+
+    # Hide mode indicator (option is lazy-loaded with keymap.vi.sh)
+    blehook keymap_load+='bleopt keymap_vi_mode_show='
 
     ble-attach
 fi
