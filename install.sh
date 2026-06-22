@@ -15,12 +15,20 @@ build_blesh() {
     cd "$DOTFILES_DIR"
     git submodule update --init --recursive
 
-    if command -v make &>/dev/null; then
-        info "Building ble.sh..."
-        make -C blesh
-    else
+    if [[ -f "$DOTFILES_DIR/blesh/out/ble.sh" ]]; then
+        info "ble.sh already built — skipping."
+        return
+    fi
+
+    if ! command -v make &>/dev/null; then
         warn "make not found — skipping ble.sh build."
         warn "Install make and re-run, or bashrc will fall back to plain readline."
+        return
+    fi
+
+    info "Building ble.sh..."
+    if ! make -C blesh; then
+        warn "ble.sh build failed (missing gawk?). bashrc will fall back to plain readline."
     fi
 }
 
