@@ -1,3 +1,4 @@
+# Prompt
 __git_branch() {
     local branch
     branch="$(git symbolic-ref --short HEAD 2>/dev/null)" ||
@@ -11,3 +12,12 @@ __set_prompt() {
 }
 
 PROMPT_COMMAND='__set_prompt'
+
+# ble.sh syntax highlighting
+if [[ ${BLE_VERSION-} ]]; then
+    ble-face -s command_file     fg=green,bold
+    ble-face -s command_builtin  fg=green,bold
+    ble-face -s command_alias    fg=green,bold
+    ble-face -s command_function fg=green,bold
+    ble-face -s command_keyword  fg=green,bold
+fi
