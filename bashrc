@@ -99,10 +99,8 @@ fi
 
 if [[ ${BLE_VERSION-} ]]; then
     bleopt input_encoding=UTF-8
-    ble-bind -m vi_imap -f __default__ vi-command/bell
 
     # Vi-mode as default keymap
-    bleopt keymap_vi_mode_update=1
     bleopt default_keymap=vi
 
     ble-attach
