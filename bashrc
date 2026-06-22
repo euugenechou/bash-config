@@ -4,6 +4,10 @@
 # Exit early if not interactive
 [[ $- != *i* ]] && return
 
+# -- system defaults ----------------------------------------------------------
+
+[[ -f /etc/bashrc ]] && source /etc/bashrc
+
 # -- ble.sh early init (deferred attach for speed) ---------------------------
 
 DOTFILES_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null || echo "${BASH_SOURCE[0]}")")" && pwd)"
