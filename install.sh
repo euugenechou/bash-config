@@ -87,19 +87,21 @@ check_deps() {
 
 # -- main ---------------------------------------------------------------------
 
+usage() {
+    echo "Usage: install.sh [-h]"
+    echo ""
+    echo "Sets up ble.sh, symlinks bashrc/inputrc, and checks for optional deps."
+}
+
 main() {
-    for arg in "$@"; do
-        case "$arg" in
-            -h|--help)
-                echo "Usage: install.sh"
-                echo ""
-                echo "Sets up ble.sh, symlinks bashrc/inputrc, and checks for optional deps."
-                exit 0
-                ;;
-            *)
-                error "Unknown argument: $arg"
-                exit 1
-                ;;
+    local opts
+    opts=$(getopt -o h -l help -n install.sh -- "$@") || { usage >&2; exit 1; }
+    eval set -- "$opts"
+
+    while true; do
+        case "$1" in
+            -h|--help) usage; exit 0 ;;
+            --) shift; break ;;
         esac
     done
 
