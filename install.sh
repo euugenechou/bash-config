@@ -59,6 +59,33 @@ setup_symlinks() {
     link_file "$DOTFILES_DIR/inputrc" "$HOME/.inputrc" ".inputrc"
 }
 
+# -- uninstall ----------------------------------------------------------------
+
+unlink_file() {
+    local src="$1" dst="$2" name="$3"
+
+    if [[ -L "$dst" && "$(readlink "$dst")" == "$src" ]]; then
+        rm "$dst"
+        info "Removed $name symlink."
+
+        # Restore most recent backup if one exists
+        local latest
+        latest="$(ls -t "${dst}.bak."* 2>/dev/null | head -1)"
+        if [[ -n "$latest" ]]; then
+            mv "$latest" "$dst"
+            info "Restored $name from $latest"
+        fi
+    else
+        warn "$name is not managed by dotfiles-bash — skipping."
+    fi
+}
+
+uninstall() {
+    unlink_file "$DOTFILES_DIR/bashrc" "$HOME/.bashrc" ".bashrc"
+    unlink_file "$DOTFILES_DIR/inputrc" "$HOME/.inputrc" ".inputrc"
+    info "Uninstalled. Restart your shell to use the restored config."
+}
+
 # -- dependency check ---------------------------------------------------------
 
 # name:command pairs — all optional, bashrc degrades gracefully without them
@@ -88,22 +115,30 @@ check_deps() {
 # -- main ---------------------------------------------------------------------
 
 usage() {
-    echo "Usage: install.sh [-h]"
+    echo "Usage: install.sh [-h] [--uninstall]"
     echo ""
     echo "Sets up ble.sh, symlinks bashrc/inputrc, and checks for optional deps."
+    echo ""
+    echo "  --uninstall  Remove symlinks and restore backups"
 }
 
 main() {
-    local opts
-    opts=$(getopt -o h -l help -n install.sh -- "$@") || { usage >&2; exit 1; }
+    local opts do_uninstall=false
+    opts=$(getopt -o h -l help,uninstall -n install.sh -- "$@") || { usage >&2; exit 1; }
     eval set -- "$opts"
 
     while true; do
         case "$1" in
             -h|--help) usage; exit 0 ;;
+            --uninstall) do_uninstall=true; shift ;;
             --) shift; break ;;
         esac
     done
+
+    if [[ "$do_uninstall" == true ]]; then
+        uninstall
+        return
+    fi
 
     build_blesh
     setup_symlinks
