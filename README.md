@@ -5,8 +5,8 @@ Portable Bash config with [ble.sh](https://github.com/akinomyoga/ble.sh) for aut
 ## Install
 
 ```bash
-git clone --recursive <repo-url> ~/dotfiles-bash
-cd ~/dotfiles-bash
+git clone --recursive <repo-url> ~/.config/bash
+cd ~/.config/bash
 ./install.sh
 ```
 
