@@ -102,6 +102,7 @@ if [[ ${BLE_VERSION-} ]]; then
 
     # Vi-mode as default keymap
     bleopt default_keymap=vi
+    bleopt keymap_vi_mode_show=
 
     ble-attach
 fi
