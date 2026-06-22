@@ -70,7 +70,7 @@ unlink_file() {
 
         # Restore most recent backup if one exists
         local latest
-        latest="$(ls -t "${dst}.bak."* 2>/dev/null | head -1)"
+        latest="$(ls -t "${dst}.bak."* 2>/dev/null | head -1 || true)"
         if [[ -n "$latest" ]]; then
             mv "$latest" "$dst"
             info "Restored $name from $latest"
@@ -120,15 +120,13 @@ usage() {
 }
 
 main() {
-    local opts do_uninstall=false
-    opts=$(getopt -o h -l help,uninstall -n install.sh -- "$@") || { usage >&2; exit 1; }
-    eval set -- "$opts"
+    local do_uninstall=false
 
-    while true; do
-        case "$1" in
+    for arg in "$@"; do
+        case "$arg" in
             -h|--help) usage; exit 0 ;;
-            --uninstall) do_uninstall=true; shift ;;
-            --) shift; break ;;
+            --uninstall) do_uninstall=true ;;
+            *) error "Unknown argument: $arg"; usage >&2; exit 1 ;;
         esac
     done
 
