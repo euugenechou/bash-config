@@ -33,9 +33,6 @@ All optional — the config degrades gracefully without them.
 |------|----------|
 | [eza](https://github.com/eza-community/eza) | `ls`/`ll`/`la`/`l` aliases |
 | [fzf](https://github.com/junegunn/fzf) | Fuzzy history search, completion |
-| [fd](https://github.com/sharkdp/fd) | Fast file finder |
-| [ripgrep](https://github.com/BurntSushi/ripgrep) | Fast grep |
-| [bat](https://github.com/sharkdp/bat) | Syntax-highlighted cat |
 | [direnv](https://github.com/direnv/direnv) | Per-directory env vars |
 
 ## Structure

@@ -92,9 +92,6 @@ uninstall() {
 DEPS=(
     "eza:eza"
     "fzf:fzf"
-    "fd:fd"
-    "ripgrep:rg"
-    "bat:bat"
     "direnv:direnv"
 )
 
