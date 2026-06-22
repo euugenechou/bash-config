@@ -61,6 +61,17 @@ setup_symlinks() {
 
 # -- optional dependency install ----------------------------------------------
 
+# canonical-name  command-to-check  apt-name   dnf-name   pacman-name  brew-name
+DEPS=(
+    "eza       eza       eza       eza       eza       eza"
+    "fzf       fzf       fzf       fzf       fzf       fzf"
+    "fd        fd        fd-find   fd-find   fd        fd"
+    "ripgrep   rg        ripgrep   ripgrep   ripgrep   ripgrep"
+    "bat       bat       bat       bat       bat       bat"
+    "direnv    direnv    direnv    direnv    direnv    direnv"
+    "git       git       git       git       git       git"
+)
+
 detect_pkg_manager() {
     if command -v apt-get &>/dev/null; then echo "apt"
     elif command -v dnf &>/dev/null; then echo "dnf"
@@ -84,34 +95,48 @@ install_deps() {
         return 1
     fi
 
-    local -a packages
+    # Map package manager to column index in DEPS table
+    local col
     case "$pm" in
-        apt)
-            packages=(eza fzf fd-find ripgrep bat direnv git)
-            ;;
-        dnf)
-            packages=(eza fzf fd-find ripgrep bat direnv git)
-            ;;
-        pacman)
-            packages=(eza fzf fd ripgrep bat direnv git)
-            ;;
-        brew)
-            packages=(eza fzf fd ripgrep bat direnv git)
-            ;;
+        apt)    col=2 ;;
+        dnf)    col=3 ;;
+        pacman) col=4 ;;
+        brew)   col=5 ;;
     esac
+
+    local -a missing=()
+    local -a already=()
+    for entry in "${DEPS[@]}"; do
+        read -ra fields <<< "$entry"
+        local name="${fields[0]}" cmd="${fields[1]}" pkg="${fields[$col]}"
+        if command -v "$cmd" &>/dev/null; then
+            already+=("$name")
+        else
+            missing+=("$pkg")
+        fi
+    done
+
+    if [[ ${#already[@]} -gt 0 ]]; then
+        info "Already installed: ${already[*]}"
+    fi
+
+    if [[ ${#missing[@]} -eq 0 ]]; then
+        info "All dependencies already installed."
+        return 0
+    fi
 
     echo ""
     info "Package manager: $pm"
-    info "Will install: ${packages[*]}"
+    info "Will install: ${missing[*]}"
     echo ""
     read -rp "Proceed? [y/N] " confirm
     [[ "$confirm" =~ ^[Yy]$ ]] || { info "Skipped."; return 0; }
 
     case "$pm" in
-        apt)    sudo apt-get update && sudo apt-get install -y "${packages[@]}" ;;
-        dnf)    sudo dnf install -y "${packages[@]}" ;;
-        pacman) sudo pacman -S --noconfirm "${packages[@]}" ;;
-        brew)   brew install "${packages[@]}" ;;
+        apt)    sudo apt-get update && sudo apt-get install -y "${missing[@]}" ;;
+        dnf)    sudo dnf install -y "${missing[@]}" ;;
+        pacman) sudo pacman -S --noconfirm "${missing[@]}" ;;
+        brew)   brew install "${missing[@]}" ;;
     esac
 
     info "Dependencies installed."
