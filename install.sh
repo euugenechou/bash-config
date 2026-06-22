@@ -83,7 +83,7 @@ unlink_file() {
 uninstall() {
     unlink_file "$DOTFILES_DIR/bashrc" "$HOME/.bashrc" ".bashrc"
     unlink_file "$DOTFILES_DIR/inputrc" "$HOME/.inputrc" ".inputrc"
-    info "Uninstalled. Restart your shell to use the restored config."
+    info "Uninstalled."
 }
 
 # -- dependency check ---------------------------------------------------------
@@ -142,7 +142,7 @@ main() {
     check_deps
 
     echo ""
-    info "Done! Restart your shell or run: source ~/.bashrc"
+    info "Done! Restart the shell or run: source ~/.bashrc"
 }
 
 main "$@"
