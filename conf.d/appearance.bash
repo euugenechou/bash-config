@@ -20,4 +20,5 @@ if [[ ${BLE_VERSION-} ]]; then
     ble-face -s command_alias    fg=green,bold
     ble-face -s command_function fg=green,bold
     ble-face -s command_keyword  fg=green,bold
+    ble-face -s syntax_error     fg=red,bold
 fi
